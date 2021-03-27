@@ -15,5 +15,5 @@ jobs:
         run: |
           wget -O "$GITHUB_WORKSPACE/covid-uk.json" --compression=auto 'https://coronavirus.data.gov.uk/api/v1/data?filters=areaType=overview&structure={%22date%22:%22date%22,%22newCasesByPublishDate%22:%22newCasesByPublishDate%22,%22newAdmissions%22:%22newAdmissions%22,%22newPeopleVaccinatedFirstDoseByPublishDate%22:%22newPeopleVaccinatedFirstDoseByPublishDate%22,%22newPeopleVaccinatedSecondDoseByPublishDate%22:%22newPeopleVaccinatedSecondDoseByPublishDate%22,%22newDeaths28DaysByPublishDate%22:%22newDeaths28DaysByPublishDate%22}&format=json'
           git add covid-uk.json
-          git commit -m "Latest UK stats."
+          git commit -m 'Latest UK stats.' --author='GitHub Actions auto-commit <github-actions[bot]@users.noreply.github.com>'
           git push
