@@ -100,19 +100,19 @@ window.onload = function() {
       }
       const charts = [
         drawChart('cases', [{
-          label: 'New COVID-19 cases, change week to week',
+          label: 'New COVID-19 cases, moving average of change week to week',
           data: casesMAR,
           borderColor: 'rgb(86,180,233)',
           pointRadius: 1
         }], true),
         drawChart('admissions', [{
-          label: 'New COVID-19 hospital admissions, change week to week',
+          label: 'New COVID-19 hospital admissions, moving average of change week to week',
           data: admissionsMAR,
           borderColor: 'rgb(86,180,233)',
           pointRadius: 1
         }], true),
         drawChart('deaths', [{
-          label: 'New COVID-19 deaths, change week to week',
+          label: 'New COVID-19 deaths, moving average of change week to week',
           data: deathsMAR,
           borderColor: 'rgb(86,180,233)',
           pointRadius: 1
