@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 window.onload = function() {
   fetch('covid-uk.json')
     .then(response => response.json())
@@ -13,55 +13,61 @@ window.onload = function() {
           options: {
             scales: {
               xAxes: [{
-                type: 'time'
+                type: 'time',
+                ticks: {
+                  min: new Date(document.getElementById('from').value),
+                  max: new Date(document.getElementById('to').value)
+                }
               }]
             }
           }
         });
+        return chart;
       };
       var cases = rawData.data.map(function(day) {
         return {x: new Date(day.date), y: day.cases};
       });
-      drawChart('cases', [{
-        label: 'Cases',
-        //backgroundColor: 'rgb(255, 99, 132)',
-        //borderColor: 'rgb(255, 99, 132)',
-        data: cases
-      }]);
       var admissions = rawData.data.map(function(day) {
         return {x: new Date(day.date), y: day.admissions};
       });
-      drawChart('admissions', [{
-        label: 'Hospital admissions',
-        //backgroundColor: 'rgb(255, 99, 132)',
-        //borderColor: 'rgb(255, 99, 132)',
-        data: admissions
-      }]);
       var deaths = rawData.data.map(function(day) {
         return {x: new Date(day.date), y: day.deaths};
       });
-      drawChart('deaths', [{
-        label: 'Deaths',
-        //backgroundColor: 'rgb(255, 99, 132)',
-        //borderColor: 'rgb(255, 99, 132)',
-        data: deaths
-      }]);
       var firstDoses = rawData.data.map(function(day) {
         return {x: new Date(day.date), y: day.firstDoses};
       });
       var secondDoses = rawData.data.map(function(day) {
         return {x: new Date(day.date), y: day.secondDoses};
       });
-      drawChart('vaccinations', [{
-        label: 'First doses',
-        //backgroundColor: 'rgb(255, 99, 132)',
-        //borderColor: 'rgb(255, 99, 132)',
-        data: firstDoses
-      }, {
-        label: 'Second doses',
-        //backgroundColor: 'rgb(255, 99, 132)',
-        //borderColor: 'rgb(255, 99, 132)',
-        data: secondDoses
-      }]);
+      var charts = [
+        drawChart('cases', [{
+          label: 'Cases',
+          data: cases
+        }]),
+        drawChart('admissions', [{
+          label: 'Hospital admissions',
+          data: admissions
+        }]),
+        drawChart('deaths', [{
+          label: 'Deaths',
+          data: deaths
+        }]),
+        drawChart('vaccinations', [{
+          label: 'First doses',
+          data: firstDoses
+        }, {
+          label: 'Second doses',
+          data: secondDoses
+        }])
+      ];
+      document.getElementById('redraw').onclick = () => {
+        for (var i = 0; i < charts.length; i++) {
+          var xaxis = charts[i].options.scales.xAxes[0];
+          xaxis.ticks.min = new Date(document.getElementById('from').value);
+          xaxis.ticks.max = new Date(document.getElementById('to').value);
+          charts[i].update();
+        }
+        return false;
+      }
     });
 }

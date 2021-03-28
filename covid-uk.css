@@ -1,6 +1,5 @@
 html {
   font-family: sans-serif;
-  font-size: 16px;
 }
 
 h3 {
@@ -14,6 +13,17 @@ h3 {
   margin: 1vw;
 }
 
+@media (orientation: portrait), screen and (max-width: 1000px) {
+  .chart-container {
+    width: 90vw;
+    height: 44vw;
+  }
+}
+
 .outer-container {
+  text-align: center;
+}
+
+#time-controls {
   text-align: center;
 }
