@@ -54,6 +54,17 @@ window.onload = function() {
         }
         return Math.pow(product, 1 / count);
       }
+      function arithMean(values) {
+        let sum = 0;
+        let count = 0;
+        for (let i = 0; i < values.length; i++) {
+          if (values[i] != null) {
+            sum += values[i];
+            count++;
+          }
+        }
+        return sum / count;
+      }
       function movingAverageRatioCalc(i, input, scratch, output) {
         if (i >= 7) {
           if (input[i].y && input[i - 7].y) {
@@ -66,7 +77,13 @@ window.onload = function() {
           output[i - 13] = {x: new Date(input[i - 7].x.getTime() + halfAWeek), y: geoMean(scratch) - 1};
         }
       }
-      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], casesMAR = [], admissionsMAR = [], deathsMAR = [];
+      function movingAverageCalc(i, input, scratch, output) {
+        scratch[i % 7] = input[i].y;
+        if (scratch.length === 7) {
+          output[i - 6] = {x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch)};
+        }
+      }
+      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [];
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
@@ -77,7 +94,9 @@ window.onload = function() {
         deaths[i] = {x: date, y: day.deaths};
         movingAverageRatioCalc(i, deaths, deathsRatio, deathsMAR);
         firstDoses[i] = {x: date, y: day.firstDoses};
+        movingAverageCalc(i, firstDoses, firstDosesWeek, firstDosesMA);
         secondDoses[i] = {x: date, y: day.secondDoses};
+        movingAverageCalc(i, secondDoses, secondDosesWeek, secondDosesMA);
       }
       const charts = [
         drawChart('cases', [{
@@ -99,13 +118,13 @@ window.onload = function() {
           pointRadius: 1
         }], true),
         drawChart('vaccinations', [{
-          label: 'First doses',
-          data: firstDoses,
+          label: 'First doses (weekly moving average)',
+          data: firstDosesMA,
           borderColor: 'rgb(230,159,0)',
           pointRadius: 1
         }, {
-          label: 'Second doses',
-          data: secondDoses,
+          label: 'Second doses (weekly moving average)',
+          data: secondDosesMA,
           borderColor: 'rgb(0,158,115)',
           pointRadius: 1
         }])
