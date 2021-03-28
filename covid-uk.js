@@ -82,22 +82,32 @@ window.onload = function() {
       const charts = [
         drawChart('cases', [{
           label: 'New COVID-19 cases, change week to week',
-          data: casesMAR
+          data: casesMAR,
+          borderColor: 'rgb(86,180,233)',
+          pointRadius: 1
         }], true),
         drawChart('admissions', [{
           label: 'New COVID-19 hospital admissions, change week to week',
-          data: admissionsMAR
+          data: admissionsMAR,
+          borderColor: 'rgb(86,180,233)',
+          pointRadius: 1
         }], true),
         drawChart('deaths', [{
           label: 'New COVID-19 deaths, change week to week',
-          data: deathsMAR
+          data: deathsMAR,
+          borderColor: 'rgb(86,180,233)',
+          pointRadius: 1
         }], true),
         drawChart('vaccinations', [{
           label: 'First doses',
-          data: firstDoses
+          data: firstDoses,
+          borderColor: 'rgb(230,159,0)',
+          pointRadius: 1
         }, {
           label: 'Second doses',
-          data: secondDoses
+          data: secondDoses,
+          borderColor: 'rgb(0,158,115)',
+          pointRadius: 1
         }])
       ];
       document.getElementById('redraw').onclick = () => {
