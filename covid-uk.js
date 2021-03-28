@@ -83,7 +83,7 @@ window.onload = function() {
           output[i - 6] = {x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch)};
         }
       }
-      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [];
+      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [];
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
@@ -97,6 +97,9 @@ window.onload = function() {
         movingAverageCalc(i, firstDoses, firstDosesWeek, firstDosesMA);
         secondDoses[i] = {x: date, y: day.secondDoses};
         movingAverageCalc(i, secondDoses, secondDosesWeek, secondDosesMA);
+        if (i >= 6) {
+          totalDosesMA[i - 6] = {x: firstDosesMA[i - 6].x, y: firstDosesMA[i - 6].y + secondDosesMA[i - 6].y};
+        }
       }
       const charts = [
         drawChart('cases', [{
@@ -121,11 +124,18 @@ window.onload = function() {
           label: 'First doses (weekly moving average)',
           data: firstDosesMA,
           borderColor: 'rgb(230,159,0)',
+          backgroundColor: 'rgba(255, 255, 255, 0)',
           pointRadius: 1
         }, {
           label: 'Second doses (weekly moving average)',
           data: secondDosesMA,
           borderColor: 'rgb(0,158,115)',
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          pointRadius: 1
+        }, {
+          label: 'Total doses (weekly moving average)',
+          data: totalDosesMA,
+          borderColor: 'rgb(100,100,100)',
           pointRadius: 1
         }])
       ];
