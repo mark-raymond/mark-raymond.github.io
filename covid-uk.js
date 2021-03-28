@@ -32,21 +32,16 @@ window.onload = function() {
         });
         return chart;
       };
-      const cases = rawData.data.map(function(day) {
-        return {x: new Date(day.date), y: day.cases};
-      });
-      const admissions = rawData.data.map(function(day) {
-        return {x: new Date(day.date), y: day.admissions};
-      });
-      const deaths = rawData.data.map(function(day) {
-        return {x: new Date(day.date), y: day.deaths};
-      });
-      const firstDoses = rawData.data.map(function(day) {
-        return {x: new Date(day.date), y: day.firstDoses};
-      });
-      const secondDoses = rawData.data.map(function(day) {
-        return {x: new Date(day.date), y: day.secondDoses};
-      });
+      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [];
+      for (let i = 0; i < rawData.data.length; i++) {
+        const day = rawData.data[i];
+        const date = new Date(day.date);
+        cases[i] = {x: date, y: day.cases};
+        admissions[i] = {x: date, y: day.admissions};
+        deaths[i] = {x: date, y: day.deaths};
+        firstDoses[i] = {x: date, y: day.firstDoses};
+        secondDoses[i] = {x: date, y: day.secondDoses};
+      }
       const charts = [
         drawChart('cases', [{
           label: 'Cases',
