@@ -3,6 +3,14 @@ window.onload = function() {
   fetch('covid-uk.json')
     .then(response => response.json())
     .then(rawData => {
+      const from = document.getElementById('from');
+      const to = document.getElementById('to');
+      if (!from.value) {
+        from.value = '2021-01-01';
+      }
+      if (!to.value) {
+        to.value = new Date().toISOString().substring(0,10);
+      }
       function drawChart(id, datasets) {
         const ctx = document.getElementById(id).getContext('2d');
         const chart = new Chart(ctx, {
@@ -15,8 +23,8 @@ window.onload = function() {
               xAxes: [{
                 type: 'time',
                 ticks: {
-                  min: new Date(document.getElementById('from').value),
-                  max: new Date(document.getElementById('to').value)
+                  min: new Date(from.value),
+                  max: new Date(to.value)
                 }
               }]
             }
@@ -63,8 +71,8 @@ window.onload = function() {
       document.getElementById('redraw').onclick = () => {
         for (let i = 0; i < charts.length; i++) {
           const xaxis = charts[i].options.scales.xAxes[0];
-          xaxis.ticks.min = new Date(document.getElementById('from').value);
-          xaxis.ticks.max = new Date(document.getElementById('to').value);
+          xaxis.ticks.min = new Date(from.value);
+          xaxis.ticks.max = new Date(to.value);
           charts[i].update();
         }
         return false;
