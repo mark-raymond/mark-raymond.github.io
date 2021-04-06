@@ -12,20 +12,23 @@ window.onload = function () {
         to.value = new Date().toISOString().substring(0, 10);
       }
       function drawChart(id, datasets, percentage) {
+        const start = new Date(from.value);
+        const end = new Date(to.value);
         const scales = {
           xAxes: [{
             type: 'time',
             ticks: {
-              min: new Date(from.value),
-              max: new Date(to.value)
+              min: start,
+              max: end
             }
           }]
         };
         if (percentage) {
+          const range = getRange(start, end);
           scales.yAxes = [{
             ticks: {
-              min: -0.4,
-              max: 0.8,
+              min: range.min,
+              max: range.max,
               callback: value => (value > 0 ? '+' : '') + (value * 100).toFixed(0) + '%'
             }
           }];
