@@ -113,6 +113,8 @@ window.onload = function () {
             if (deathsMAR[i].y > max) { max = deathsMAR[i].y; }
           }
         }
+        min = -(Math.ceil(-min * 5) / 5);
+        max = Math.ceil(max * 5) / 5;
         return { min, max };
       }
       const charts = [
@@ -157,13 +159,16 @@ window.onload = function () {
         const start = new Date(from.value);
         const end = new Date(to.value);
         const range = getRange(start, end);
-        console.log(range);
         for (let i = 0; i < charts.length; i++) {
           const chart = charts[i];
           const xaxis = chart.options.scales.xAxes[0];
           xaxis.ticks.min = start;
           xaxis.ticks.max = end;
-          console.log(chart.options.scales.yAxes);
+          const yaxis = chart.options.scales.yAxes[0];
+          if (yaxis.ticks.min !== undefined) {
+            yaxis.ticks.min = range.min;
+            yaxis.ticks.max = range.max;
+          }
           chart.update();
         }
         return false;
