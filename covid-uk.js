@@ -101,6 +101,20 @@ window.onload = function() {
           totalDosesMA[i - 6] = {x: firstDosesMA[i - 6].x, y: firstDosesMA[i - 6].y + secondDosesMA[i - 6].y};
         }
       }
+      function getRange(start, end) {
+        let min = 0, max = 0;
+        for (let i = 0; i < casesMAR.length; i++) {
+          if (casesMAR[i].x >= start && casesMAR[i].x <= end) {
+            if (casesMAR[i].y < min) { min = casesMAR[i]; }
+            if (casesMAR[i].y > max) { max = casesMAR[i]; }
+            if (admissionsMAR[i].y < min) { min = admissionsMAR[i]; }
+            if (admissionsMAR[i].y > max) { max = admissionsMAR[i]; }
+            if (deathsMAR[i].y < min) { min = deathsMAR[i]; }
+            if (deathsMAR[i].y > max) { max = deathsMAR[i]; }
+          }
+        }
+        return { min, max };
+      }
       const charts = [
         drawChart('cases', [{
           label: 'New COVID-19 cases, moving average of change week to week',
@@ -140,11 +154,17 @@ window.onload = function() {
         }])
       ];
       document.getElementById('redraw').onclick = () => {
+        const start = new Date(from.value);
+        const end = new Date(to.value);
+        const range = getRange(start, end);
+        console.log(range);
         for (let i = 0; i < charts.length; i++) {
-          const xaxis = charts[i].options.scales.xAxes[0];
-          xaxis.ticks.min = new Date(from.value);
-          xaxis.ticks.max = new Date(to.value);
-          charts[i].update();
+          const chart = charts[i];
+          const xaxis = chart.options.scales.xAxes[0];
+          xaxis.ticks.min = start;
+          xaxis.ticks.max = end;
+          console.log(chart.options.scales.yAxes);
+          chart.update();
         }
         return false;
       }
