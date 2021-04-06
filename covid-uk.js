@@ -1,5 +1,5 @@
 'use strict';
-window.onload = function() {
+window.onload = function () {
   fetch('covid-uk.json')
     .then(response => response.json())
     .then(rawData => {
@@ -9,7 +9,7 @@ window.onload = function() {
         from.value = '2021-01-01';
       }
       if (!to.value) {
-        to.value = new Date().toISOString().substring(0,10);
+        to.value = new Date().toISOString().substring(0, 10);
       }
       function drawChart(id, datasets, percentage) {
         const scales = {
@@ -74,31 +74,31 @@ window.onload = function() {
           }
         }
         if (scratch.length === 7) {
-          output[i - 13] = {x: new Date(input[i - 7].x.getTime() + halfAWeek), y: geoMean(scratch) - 1};
+          output[i - 13] = { x: new Date(input[i - 7].x.getTime() + halfAWeek), y: geoMean(scratch) - 1 };
         }
       }
       function movingAverageCalc(i, input, scratch, output) {
         scratch[i % 7] = input[i].y;
         if (scratch.length === 7) {
-          output[i - 6] = {x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch)};
+          output[i - 6] = { x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch) };
         }
       }
       const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [];
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
-        cases[i] = {x: date, y: day.cases};
+        cases[i] = { x: date, y: day.cases };
         movingAverageRatioCalc(i, cases, casesRatio, casesMAR);
-        admissions[i] = {x: date, y: day.admissions};
+        admissions[i] = { x: date, y: day.admissions };
         movingAverageRatioCalc(i, admissions, admissionsRatio, admissionsMAR);
-        deaths[i] = {x: date, y: day.deaths};
+        deaths[i] = { x: date, y: day.deaths };
         movingAverageRatioCalc(i, deaths, deathsRatio, deathsMAR);
-        firstDoses[i] = {x: date, y: day.firstDoses};
+        firstDoses[i] = { x: date, y: day.firstDoses };
         movingAverageCalc(i, firstDoses, firstDosesWeek, firstDosesMA);
-        secondDoses[i] = {x: date, y: day.secondDoses};
+        secondDoses[i] = { x: date, y: day.secondDoses };
         movingAverageCalc(i, secondDoses, secondDosesWeek, secondDosesMA);
         if (i >= 6) {
-          totalDosesMA[i - 6] = {x: firstDosesMA[i - 6].x, y: firstDosesMA[i - 6].y + secondDosesMA[i - 6].y};
+          totalDosesMA[i - 6] = { x: firstDosesMA[i - 6].x, y: firstDosesMA[i - 6].y + secondDosesMA[i - 6].y };
         }
       }
       function getRange(start, end) {
