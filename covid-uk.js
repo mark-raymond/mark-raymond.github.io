@@ -105,12 +105,12 @@ window.onload = function () {
         let min = 0, max = 0;
         for (let i = 0; i < casesMAR.length; i++) {
           if (casesMAR[i].x >= start && casesMAR[i].x <= end) {
-            if (casesMAR[i].y < min) { min = casesMAR[i]; }
-            if (casesMAR[i].y > max) { max = casesMAR[i]; }
-            if (admissionsMAR[i].y < min) { min = admissionsMAR[i]; }
-            if (admissionsMAR[i].y > max) { max = admissionsMAR[i]; }
-            if (deathsMAR[i].y < min) { min = deathsMAR[i]; }
-            if (deathsMAR[i].y > max) { max = deathsMAR[i]; }
+            if (casesMAR[i].y < min) { min = casesMAR[i].y; }
+            if (casesMAR[i].y > max) { max = casesMAR[i].y; }
+            if (admissionsMAR[i].y < min) { min = admissionsMAR[i].y; }
+            if (admissionsMAR[i].y > max) { max = admissionsMAR[i].y; }
+            if (deathsMAR[i].y < min) { min = deathsMAR[i].y; }
+            if (deathsMAR[i].y > max) { max = deathsMAR[i].y; }
           }
         }
         return { min, max };
