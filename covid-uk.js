@@ -87,22 +87,38 @@ window.onload = function () {
         }
       }
       const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [], secondDoseDelay = [];
+      const casesOffset = rawData.data.findIndex(day => day.cases !== null);
+      const admissionsOffset = rawData.data.findIndex(day => day.admissions !== null);
+      const deathsOffset = rawData.data.findIndex(day => day.deaths !== null);
+      const firstDosesOffset = rawData.data.findIndex(day => day.firstDoses !== null);
+      const secondDosesOffset = rawData.data.findIndex(day => day.secondDoses !== null);
+      const totalDosesMAOffset = 6 + Math.max(firstDosesOffset, secondDosesOffset);
       let firstDoseIndex = rawData.data.findIndex(day => day.firstDosesCum);
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
-        cases[i] = { x: date, y: day.cases };
-        movingAverageRatioCalc(i, cases, casesRatio, casesMAR);
-        admissions[i] = { x: date, y: day.admissions };
-        movingAverageRatioCalc(i, admissions, admissionsRatio, admissionsMAR);
-        deaths[i] = { x: date, y: day.deaths };
-        movingAverageRatioCalc(i, deaths, deathsRatio, deathsMAR);
-        firstDoses[i] = { x: date, y: day.firstDoses };
-        movingAverageCalc(i, firstDoses, firstDosesWeek, firstDosesMA);
-        secondDoses[i] = { x: date, y: day.secondDoses };
-        movingAverageCalc(i, secondDoses, secondDosesWeek, secondDosesMA);
-        if (i >= 6) {
-          totalDosesMA[i - 6] = { x: firstDosesMA[i - 6].x, y: firstDosesMA[i - 6].y + secondDosesMA[i - 6].y };
+        if (day.cases !== null) {
+          cases[i - casesOffset] = { x: date, y: day.cases };
+          movingAverageRatioCalc(i - casesOffset, cases, casesRatio, casesMAR);
+        }
+        if (day.admissions !== null) {
+          admissions[i - admissionsOffset] = { x: date, y: day.admissions };
+          movingAverageRatioCalc(i - admissionsOffset, admissions, admissionsRatio, admissionsMAR);
+        }
+        if (day.deaths !== null) {
+          deaths[i - deathsOffset] = { x: date, y: day.deaths };
+          movingAverageRatioCalc(i - deathsOffset, deaths, deathsRatio, deathsMAR);
+        }
+        if (day.firstDoses !== null) {
+          firstDoses[i - firstDosesOffset] = { x: date, y: day.firstDoses };
+          movingAverageCalc(i - firstDosesOffset, firstDoses, firstDosesWeek, firstDosesMA);
+        }
+        if (day.secondDoses !== null) {
+          secondDoses[i - secondDosesOffset] = { x: date, y: day.secondDoses };
+          movingAverageCalc(i - secondDosesOffset, secondDoses, secondDosesWeek, secondDosesMA);
+        }
+        if (i >= totalDosesMAOffset && firstDosesMA[i - 6 - firstDosesOffset] && secondDosesMA[i - 6 - secondDosesOffset]) {
+          totalDosesMA[i - totalDosesMAOffset] = { x: firstDosesMA[i - 6 - firstDosesOffset].x, y: firstDosesMA[i - 6 - firstDosesOffset].y + secondDosesMA[i - 6 - secondDosesOffset].y };
         }
         if (rawData.data[i].secondDosesCum && firstDoseIndex < rawData.data.length && rawData.data[firstDoseIndex].firstDosesCum) {
           while (firstDoseIndex < rawData.data.length && rawData.data[firstDoseIndex].firstDosesCum && rawData.data[firstDoseIndex].firstDosesCum > rawData.data[i].secondDosesCum) {
@@ -116,20 +132,22 @@ window.onload = function () {
           }
         }
       }
-      function getRange(start, end) {
+      function getMinMax(data, start, end) {
         let min = 0, max = 0;
-        for (let i = 0; i < casesMAR.length; i++) {
-          if (casesMAR[i].x >= start && casesMAR[i].x <= end) {
-            if (casesMAR[i].y < min) { min = casesMAR[i].y; }
-            if (casesMAR[i].y > max) { max = casesMAR[i].y; }
-            if (admissionsMAR[i].y < min) { min = admissionsMAR[i].y; }
-            if (admissionsMAR[i].y > max) { max = admissionsMAR[i].y; }
-            if (deathsMAR[i].y < min) { min = deathsMAR[i].y; }
-            if (deathsMAR[i].y > max) { max = deathsMAR[i].y; }
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].x >= start && data[i].x <= end) {
+            if (data[i].y < min) { min = data[i].y; }
+            if (data[i].y > max) { max = data[i].y; }
           }
         }
-        min = -(Math.ceil(-min * 5) / 5);
-        max = Math.ceil(max * 5) / 5;
+        return { min, max };
+      }
+      function getRange(start, end) {
+        const casesMinMax = getMinMax(casesMAR, start, end);
+        const admissionsMinMax = getMinMax(admissionsMAR, start, end);
+        const deathsMinMax = getMinMax(deathsMAR, start, end);
+        const min = -(Math.ceil(-Math.min(casesMinMax.min, admissionsMinMax.min, deathsMinMax.min) * 5) / 5);
+        const max = Math.ceil(Math.max(casesMinMax.max, admissionsMinMax.max, deathsMinMax.max) * 5) / 5;
         return { min, max };
       }
       const charts = [
