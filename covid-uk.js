@@ -6,7 +6,7 @@ window.onload = function () {
       const from = document.getElementById('from');
       const to = document.getElementById('to');
       if (!from.value) {
-        from.value = '2021-01-01';
+        from.value = '2021-03-22';
       }
       if (!to.value) {
         to.value = new Date().toISOString().substring(0, 10);
