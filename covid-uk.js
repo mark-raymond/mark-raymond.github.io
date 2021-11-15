@@ -86,7 +86,7 @@ window.onload = function () {
           output[i - 6] = { x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch) };
         }
       }
-      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [], secondDoseDelay = [];
+      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [];
       const casesOffset = rawData.data.findIndex(day => day.cases !== null);
       const admissionsOffset = rawData.data.findIndex(day => day.admissions !== null);
       const deathsOffset = rawData.data.findIndex(day => day.deaths !== null);
@@ -119,17 +119,6 @@ window.onload = function () {
         }
         if (i >= totalDosesMAOffset && firstDosesMA[i - 6 - firstDosesOffset] && secondDosesMA[i - 6 - secondDosesOffset]) {
           totalDosesMA[i - totalDosesMAOffset] = { x: firstDosesMA[i - 6 - firstDosesOffset].x, y: firstDosesMA[i - 6 - firstDosesOffset].y + secondDosesMA[i - 6 - secondDosesOffset].y };
-        }
-        if (rawData.data[i].secondDosesCum && firstDoseIndex < rawData.data.length && rawData.data[firstDoseIndex].firstDosesCum) {
-          while (firstDoseIndex < rawData.data.length && rawData.data[firstDoseIndex].firstDosesCum && rawData.data[firstDoseIndex].firstDosesCum > rawData.data[i].secondDosesCum) {
-            firstDoseIndex++;
-          }
-          if (firstDoseIndex < rawData.data.length && rawData.data[firstDoseIndex].firstDosesCum) {
-            const partDay = (rawData.data[firstDoseIndex].firstDosesCum - rawData.data[i].secondDosesCum) /
-                            (rawData.data[firstDoseIndex].firstDosesCum - rawData.data[firstDoseIndex - 1].firstDosesCum);
-            const weeks = ((date - new Date(rawData.data[firstDoseIndex].date)) - (partDay * (new Date(rawData.data[firstDoseIndex - 1].date) - new Date(rawData.data[firstDoseIndex].date)))) / 604800000;
-            secondDoseDelay.push({ x: date, y: weeks });
-          }
         }
       }
       function getMinMax(data, start, end) {
@@ -185,12 +174,6 @@ window.onload = function () {
           label: 'Total doses (weekly moving average)',
           data: totalDosesMA,
           borderColor: 'rgb(100,100,100)',
-          pointRadius: 1
-        }]),
-        drawChart('secondDoseDelay', [{
-          label: 'Delay between first dose and second dose in weeks',
-          data: secondDoseDelay,
-          borderColor: 'rgb(86,180,233)',
           pointRadius: 1
         }])
       ];
