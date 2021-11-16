@@ -86,14 +86,20 @@ window.onload = function () {
           output[i - 6] = { x: new Date(input[i].x.getTime() + halfAWeek), y: arithMean(scratch) };
         }
       }
-      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], totalDosesMA = [];
+      const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], thirdDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], thirdDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], thirdDosesMA = [], totalDosesMA = [];
       const casesOffset = rawData.data.findIndex(day => day.cases !== null);
       const admissionsOffset = rawData.data.findIndex(day => day.admissions !== null);
       const deathsOffset = rawData.data.findIndex(day => day.deaths !== null);
       const firstDosesOffset = rawData.data.findIndex(day => day.firstDoses !== null);
       const secondDosesOffset = rawData.data.findIndex(day => day.secondDoses !== null);
-      const totalDosesMAOffset = 6 + Math.max(firstDosesOffset, secondDosesOffset);
-      let firstDoseIndex = rawData.data.findIndex(day => day.firstDosesCum);
+      const thirdDosesOffset = rawData.data.findIndex(day => day.thirdDoses !== null);
+      if (firstDosesOffset !== secondDosesOffset || firstDosesOffset !== thirdDosesOffset) {
+        console.log("First doses offset = " + firstDosesOffset);
+        console.log("Second doses offset = " + secondDosesOffset);
+        console.log("Third doses offset = " + thirdDosesOffset);
+        throw "Doses offsets don't match";
+      }
+      const dosesOffset = firstDosesOffset;
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
@@ -110,15 +116,19 @@ window.onload = function () {
           movingAverageRatioCalc(i - deathsOffset, deaths, deathsRatio, deathsMAR);
         }
         if (day.firstDoses !== null) {
-          firstDoses[i - firstDosesOffset] = { x: date, y: day.firstDoses };
-          movingAverageCalc(i - firstDosesOffset, firstDoses, firstDosesWeek, firstDosesMA);
+          firstDoses[i - dosesOffset] = { x: date, y: day.firstDoses };
+          movingAverageCalc(i - dosesOffset, firstDoses, firstDosesWeek, firstDosesMA);
         }
         if (day.secondDoses !== null) {
-          secondDoses[i - secondDosesOffset] = { x: date, y: day.secondDoses };
-          movingAverageCalc(i - secondDosesOffset, secondDoses, secondDosesWeek, secondDosesMA);
+          secondDoses[i - dosesOffset] = { x: date, y: day.secondDoses };
+          movingAverageCalc(i - dosesOffset, secondDoses, secondDosesWeek, secondDosesMA);
         }
-        if (i >= totalDosesMAOffset && firstDosesMA[i - 6 - firstDosesOffset] && secondDosesMA[i - 6 - secondDosesOffset]) {
-          totalDosesMA[i - totalDosesMAOffset] = { x: firstDosesMA[i - 6 - firstDosesOffset].x, y: firstDosesMA[i - 6 - firstDosesOffset].y + secondDosesMA[i - 6 - secondDosesOffset].y };
+        if (day.thirdDoses !== null) {
+          thirdDoses[i - dosesOffset] = { x: date, y: day.thirdDoses };
+          movingAverageCalc(i - dosesOffset, thirdDoses, thirdDosesWeek, thirdDosesMA);
+        }
+        if (i >= dosesOffset + 6 && firstDosesMA[i - 6 - dosesOffset] && secondDosesMA[i - 6 - dosesOffset] && thirdDosesMA[i - 6 - dosesOffset]) {
+          totalDosesMA[i - 6 - dosesOffset] = { x: firstDosesMA[i - 6 - dosesOffset].x, y: firstDosesMA[i - 6 - dosesOffset].y + secondDosesMA[i - 6 - dosesOffset].y + thirdDosesMA[i - 6 - dosesOffset].y };
         }
       }
       function getMinMax(data, start, end) {
