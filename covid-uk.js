@@ -127,8 +127,12 @@ window.onload = function () {
           thirdDoses[i - dosesOffset] = { x: date, y: day.thirdDoses };
           movingAverageCalc(i - dosesOffset, thirdDoses, thirdDosesWeek, thirdDosesMA);
         }
-        if (i >= dosesOffset + 6 && firstDosesMA[i - 6 - dosesOffset] && secondDosesMA[i - 6 - dosesOffset] && thirdDosesMA[i - 6 - dosesOffset]) {
-          totalDosesMA[i - 6 - dosesOffset] = { x: firstDosesMA[i - 6 - dosesOffset].x, y: firstDosesMA[i - 6 - dosesOffset].y + secondDosesMA[i - 6 - dosesOffset].y + thirdDosesMA[i - 6 - dosesOffset].y };
+        if (i >= dosesOffset + 6 && firstDosesMA[i - 6 - dosesOffset]) {
+          const todayIndex = i - 6 - dosesOffset;
+          const todayFirstDosesMA = firstDosesMA[todayIndex].y;
+          const todaySecondDosesMA = secondDosesMA[todayIndex] ? secondDosesMA[todayIndex].y : 0;
+          const todayThirdDosesMA = thirdDosesMA[todayIndex] ? thirdDosesMA[todayIndex].y : 0;
+          totalDosesMA[todayIndex] = { x: firstDosesMA[todayIndex].x, y: todayFirstDosesMA + todaySecondDosesMA + todayThirdDosesMA };
         }
       }
       function getMinMax(data, start, end) {
