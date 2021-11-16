@@ -185,6 +185,12 @@ window.onload = function () {
           backgroundColor: 'rgba(255, 255, 255, 0)',
           pointRadius: 1
         }, {
+          label: 'Third doses (weekly moving average)',
+          data: thirdDosesMA,
+          borderColor: 'rgb(86,180,233)',
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          pointRadius: 1
+        }, {
           label: 'Total doses (weekly moving average)',
           data: totalDosesMA,
           borderColor: 'rgb(100,100,100)',
