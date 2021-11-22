@@ -9,7 +9,9 @@ window.onload = function () {
         from.value = '2021-07-19';
       }
       if (!to.value) {
-        to.value = new Date().toISOString().substring(0, 10);
+        let defaultEnd = new Date();
+        defaultEnd.setDate(defaultEnd.getDate() - 3);
+        to.value = defaultEnd.toISOString().substring(0, 10);
       }
       function drawChart(id, datasets, percentage) {
         const start = new Date(from.value);
