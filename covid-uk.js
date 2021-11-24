@@ -10,7 +10,7 @@ window.onload = function () {
       }
       if (!to.value) {
         let defaultEnd = new Date();
-        defaultEnd.setDate(defaultEnd.getDate() - 3);
+        defaultEnd.setDate(defaultEnd.getDate() - 2);
         to.value = defaultEnd.toISOString().substring(0, 10);
       }
       function drawChart(id, datasets, percentage) {
