@@ -91,7 +91,7 @@ window.onload = function () {
       const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], thirdDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], thirdDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], thirdDosesMA = [], totalDosesMA = [];
       const casesOffset = rawData.data.findIndex(day => day.cases !== null);
       const admissionsOffset = rawData.data.findIndex(day => day.admissions !== null);
-      const deathsOffset = rawData.data.findIndex(day => day.deaths !== null);
+      const deathsOffset = rawData.data.findIndex(day => day.deaths !== null) + 5;
       const firstDosesOffset = rawData.data.findIndex(day => day.firstDoses !== null);
       const secondDosesOffset = rawData.data.findIndex(day => day.secondDoses !== null);
       const thirdDosesOffset = rawData.data.findIndex(day => day.thirdDoses !== null);
