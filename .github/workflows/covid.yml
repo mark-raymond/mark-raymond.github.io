@@ -2,7 +2,7 @@ name: Get latest COVID-19 stats
 
 on:
   schedule:
-    - cron: '13 16 * * *'
+    - cron: '13 16 * * 1-5'
   workflow_dispatch:
 
 jobs:
