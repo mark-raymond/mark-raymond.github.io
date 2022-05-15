@@ -89,7 +89,8 @@ window.onload = function () {
         }
       }
       const cases = [], admissions = [], deaths = [], firstDoses = [], secondDoses = [], thirdDoses = [], casesRatio = [], admissionsRatio = [], deathsRatio = [], firstDosesWeek = [], secondDosesWeek = [], thirdDosesWeek = [], casesMAR = [], admissionsMAR = [], deathsMAR = [], firstDosesMA = [], secondDosesMA = [], thirdDosesMA = [], totalDosesMA = [];
-      const casesOffset = rawData.data.findIndex(day => day.cases !== null);
+      const casesEndDate = new Date("2022-04-15")
+      const casesOffset = rawData.data.findIndex(day => day.cases !== null && new Date(day.date) <= casesEndDate);
       const admissionsOffset = rawData.data.findIndex(day => day.admissions !== null);
       const deathsOffset = rawData.data.findIndex(day => day.deaths !== null) + 5;
       const firstDosesOffset = rawData.data.findIndex(day => day.firstDoses !== null);
@@ -105,7 +106,7 @@ window.onload = function () {
       for (let i = 0; i < rawData.data.length; i++) {
         const day = rawData.data[i];
         const date = new Date(day.date);
-        if (day.cases !== null) {
+        if (day.cases !== null && date <= casesEndDate) {
           cases[i - casesOffset] = { x: date, y: day.cases };
           movingAverageRatioCalc(i - casesOffset, cases, casesRatio, casesMAR);
         }
