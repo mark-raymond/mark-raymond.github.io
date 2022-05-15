@@ -6,7 +6,7 @@ window.onload = function () {
       const from = document.getElementById('from');
       const to = document.getElementById('to');
       if (!from.value) {
-        from.value = '2021-07-19';
+        from.value = '2022-01-01';
       }
       if (!to.value) {
         let defaultEnd = new Date();
