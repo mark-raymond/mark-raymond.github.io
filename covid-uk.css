@@ -4,6 +4,13 @@ html {
 
 h3 {
   text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+h4 {
+  text-align: center;
+  color: red;
+  margin-top: 0;
 }
 
 .chart-container {
