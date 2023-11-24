@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Kitchen wall colour picker</title>
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
+  <style>
+
+#render, #pickers {
+  float: left;
+  margin: 0.5rem;
+}
+
+#render {
+  display: grid;
+}
+
+#template {
+  grid-column: 1/3;
+  grid-row: 1;
+}
+
+#wall {
+  width: 256px;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#tiles {
+  width: 509px;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#wall-colour > h2 {
+  margin-top: 0;
+}
+
+.wall-button {
+  height: 2rem;
+  width: 6rem;
+}
+
+.tile-button {
+  height: 2rem;
+  width: 12rem;
+  display: block;
+}
+
+.white {
+  color: white;
+}
+
+  </style>
+ </head>
+ <body>
+  <div id="pickers">
+   <div id="wall-colour">
+    <h2>Wall colour</h2>
+    <button style="background-color: #f3f3f3;" class="wall-button">White</button>
+    <button style="background-color: #d9e6ee;" class="wall-button">PPG1241-1</button>
+    <div id="picker"></div>
+   </div>
+   <div id="tile-colour">
+    <h2>Tile colour</h2>
+    <button style="background-color: #f3f3f3;" class="tile-button">White</button>
+    <button style="background-color: #e4edee;" class="tile-button">Topps: Matrix Sky Blue</button>
+    <button style="background-color: #1b285d;" class="tile-button white">Topps: Matrix Blue</button>
+    <button style="background-color: #d1dad9;" class="tile-button">Topps: Diamante Pastel Sky</button>
+    <button style="background-color: #368899;" class="tile-button">Topps: Diamante Teal</button>
+    <button style="background-color: #1a1d31;" class="tile-button white">Topps: Diamante Blue</button>
+    <button style="background-color: #e3f3f1;" class="tile-button">Topps: Metro Mint</button>
+    <button style="background-color: #18493c;" class="tile-button">Topps: Metro Forest</button>
+    <button style="background-color: #013254;" class="tile-button white">Topps: Metro Deep Blue</button>
+    <button style="background-color: #d1d9dc;" class="tile-button">B&amp;Q: Trentie Blue</button>
+    <button style="background-color: #2273ae;" class="tile-button white">B&amp;Q: Trentie Petrol Blue</button>
+    <button style="background-color: #196058;" class="tile-button white">B&amp;Q: Trentie Dark Green</button>
+    <button style="background-color: #6ea2b0;" class="tile-button">B&amp;Q: Glina Blue</button>
+    <button style="background-color: #abc1b5;" class="tile-button">B&amp;Q: Glina Green</button>
+   </div>
+  </div>
+  <div id="render"><div id="wall"></div><div style="background-color: #f3f3f3;" id="tiles"></div><img id="template" src="kitchen.png" /></div>
+  <script>
+"use strict";
+
+const parent = document.getElementById('picker');
+const wall = document.getElementById('wall');
+const picker = new Picker({
+          parent: parent,
+          popup: false,
+          alpha: false,
+          editor: true,
+          color: '#f3f3f3',
+          onChange: function(color) {
+              wall.style.backgroundColor = color.rgbaString;
+          },
+      });
+[...document.getElementsByClassName('wall-button')].forEach(function (button) {
+  const colour = window.getComputedStyle(button).backgroundColor;
+  button.onclick = function() { picker.setColor(colour); };
+});
+const tiles = document.getElementById('tiles');
+[...document.getElementsByClassName('tile-button')].forEach(function (button) {
+  const colour = window.getComputedStyle(button).backgroundColor;
+  button.onclick = function() { tiles.style.backgroundColor = colour; };
+});
+
+  </script>
+ </body>
+</html>
